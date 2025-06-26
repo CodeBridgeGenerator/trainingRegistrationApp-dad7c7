@@ -191,11 +191,14 @@ const SingleSectionsPage = (props) => {
           </div>
         </div>
         <div className="mt-2">
-<TabView>                <TabPanel header="true" leftIcon="pi pi-building-columns mr-2">
-                  <ProfilesPage />
-                </TabPanel>
+          <TabView>
+            {" "}
+            <TabPanel header="true" leftIcon="pi pi-building-columns mr-2">
+              <ProfilesPage />
+            </TabPanel>
           </TabView>
-        </div>        <CommentsSection
+        </div>{" "}
+        <CommentsSection
           recordId={urlParams.singleSectionsId}
           user={props.user}
           alert={props.alert}

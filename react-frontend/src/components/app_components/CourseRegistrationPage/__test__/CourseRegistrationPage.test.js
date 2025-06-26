@@ -9,14 +9,14 @@ import { Provider } from "react-redux";
 import * as models from "../../../models";
 
 test("renders courseRegistration page", async () => {
-    const store = init({ models });
-    render(
-        <Provider store={store}>
-            <MemoryRouter>
-                <CourseRegistrationPage />
-            </MemoryRouter>
-        </Provider>
-    );
-    expect(screen.getByRole("courseRegistration-datatable")).toBeInTheDocument();
-    expect(screen.getByRole("courseRegistration-add-button")).toBeInTheDocument();
+  const store = init({ models });
+  render(
+    <Provider store={store}>
+      <MemoryRouter>
+        <CourseRegistrationPage />
+      </MemoryRouter>
+    </Provider>,
+  );
+  expect(screen.getByRole("courseRegistration-datatable")).toBeInTheDocument();
+  expect(screen.getByRole("courseRegistration-add-button")).toBeInTheDocument();
 });

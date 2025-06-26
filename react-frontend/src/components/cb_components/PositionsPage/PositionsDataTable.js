@@ -21,7 +21,7 @@ import { Toast } from "primereact/toast";
 import DeleteImage from "../../../assets/media/Delete.png";
 import client from "../../../services/restClient";
 import { Dropdown } from "primereact/dropdown";
-import { Skeleton } from 'primereact/skeleton';
+import { Skeleton } from "primereact/skeleton";
 
 const PositionsDataTable = ({
   items,
@@ -190,7 +190,6 @@ const PositionsDataTable = ({
     },
   };
 
-
   const deselectAllRows = () => {
     // Logic to deselect all selected rows
     setSelectedItems([]); // Assuming setSelectedItems is used to manage selected items state
@@ -296,7 +295,6 @@ const PositionsDataTable = ({
     }
   }, [selectedUser]);
 
-
   const handleMessage = () => {
     setShowDialog(true); // Open the dialog
   };
@@ -387,7 +385,10 @@ const PositionsDataTable = ({
 
   const renderSkeleton = () => {
     return (
-      <DataTable value={Array.from({ length: 5 })} className="p-datatable-striped">
+      <DataTable
+        value={Array.from({ length: 5 })}
+        className="p-datatable-striped"
+      >
         <Column body={<Skeleton />} />
         <Column body={<Skeleton />} />
         <Column body={<Skeleton />} />
@@ -642,7 +643,6 @@ const PositionsDataTable = ({
                   }}
                 />
 
-
                 {/* InboxCreateDialogComponent */}
                 <InboxCreateDialogComponent
                   show={showDialog}
@@ -660,7 +660,11 @@ const PositionsDataTable = ({
                   icon={
                     <img
                       src={DeleteIcon}
-                      style={{ marginRight: "4px", width: "1em", height: "1em" }}
+                      style={{
+                        marginRight: "4px",
+                        width: "1em",
+                        height: "1em",
+                      }}
                     />
                   }
                   onClick={handleDelete}

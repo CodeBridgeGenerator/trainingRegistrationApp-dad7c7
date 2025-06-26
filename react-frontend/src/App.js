@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Provider, connect } from "react-redux"; // Import connect
@@ -80,5 +81,7 @@ const mapState = (state) => {
   const { isLoggedIn } = state.auth;
   return { isLoggedIn };
 };
+
+
 
 export default connect(mapState)(App);

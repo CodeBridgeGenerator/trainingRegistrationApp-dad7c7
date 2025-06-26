@@ -1,5 +1,5 @@
 const { Queue, Worker } = require("bullmq");
-const connection = require("../services/redis/config");
+const connection = require("../cbServices/redis/config");
 const jobQueue = new Queue("createUserProfile", { connection });
 
 const createUserProfileInDB = async (app, superAdmin, data) => {
@@ -13,7 +13,7 @@ const createUserProfileInDB = async (app, superAdmin, data) => {
       .find({ query: { name: "Super" } });
 
     await app.service("profiles").create({
-      name: `${data.name} - Admin`, 
+      name: `${data.name} - Admin`,
       userId: data._id,
       role: userAdminRole.data[0]._id,
       position: userAdminPosition.data[0]._id,
@@ -34,7 +34,7 @@ const createUserProfileInDB = async (app, superAdmin, data) => {
           const position = await app.service("positions").get(positionId);
 
           // Get role ID (use corresponding role or default)
-          let roleId = roles[positions.indexOf(positionId)]; 
+          let roleId = roles[positions.indexOf(positionId)];
           if (!roleId) {
             const defaultRole = await app
               .service("roles")
@@ -60,7 +60,7 @@ const createUserProfileInDB = async (app, superAdmin, data) => {
           .find({ query: { isDefault: true } });
 
         await app.service("profiles").create({
-          name: `${data.name} - ${defaultPosition.data[0].name}`, 
+          name: `${data.name} - ${defaultPosition.data[0].name}`,
           userId: data._id,
           role: defaultRole.data[0]._id,
           position: defaultPosition.data[0]._id,
@@ -76,7 +76,7 @@ const createUserProfileInDB = async (app, superAdmin, data) => {
         .find({ query: { isDefault: true } });
 
       await app.service("profiles").create({
-        name: `${data.name} - ${defaultPosition.data[0].name}`, 
+        name: `${data.name} - ${defaultPosition.data[0].name}`,
         userId: data._id,
         role: defaultRole.data[0]._id,
         position: defaultPosition.data[0]._id,
@@ -84,7 +84,6 @@ const createUserProfileInDB = async (app, superAdmin, data) => {
     }
   }
 };
-
 
 // Create and export the worker
 const createUserProfile = (app) => {

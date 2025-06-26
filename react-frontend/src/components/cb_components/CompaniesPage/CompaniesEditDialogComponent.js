@@ -10,7 +10,7 @@ import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
 import { Calendar } from "primereact/calendar";
 import { Checkbox } from "primereact/checkbox";
-import { Dropdown } from "primereact/dropdown"
+import { Dropdown } from "primereact/dropdown";
 import { getSchemaValidationErrorsStrings } from "../../../utils";
 
 const CompaniesCreateDialogComponent = (props) => {

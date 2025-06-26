@@ -53,22 +53,22 @@ const CompanyAddressesPage = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [paginatorRecordsNo, setPaginatorRecordsNo] = useState(10);
 
-   const getOrSetTabId = () => {
-      let tabId = sessionStorage.getItem("browserTabId");
-      if (!tabId) {
-        tabId = uuidv4();
-        sessionStorage.setItem("browserTabId", tabId);
-      }
-      return tabId;
-    };
-  
-    useEffect(() => {
-      const tabId = getOrSetTabId();
-      if (selectedUser) {
-        localStorage.setItem(`selectedUser_${tabId}`, selectedUser);
-      }
-    }, [selectedUser]);
-   
+  const getOrSetTabId = () => {
+    let tabId = sessionStorage.getItem("browserTabId");
+    if (!tabId) {
+      tabId = uuidv4();
+      sessionStorage.setItem("browserTabId", tabId);
+    }
+    return tabId;
+  };
+
+  useEffect(() => {
+    const tabId = getOrSetTabId();
+    if (selectedUser) {
+      localStorage.setItem(`selectedUser_${tabId}`, selectedUser);
+    }
+  }, [selectedUser]);
+
   const toggleHelpSidebar = () => {
     setHelpSidebarVisible(!isHelpSidebarVisible);
   };
@@ -143,7 +143,13 @@ const CompanyAddressesPage = (props) => {
           message: error.message || "Failed get Company Addresses",
         });
       });
-  }, [showFakerDialog, showDeleteAllDialog, showEditDialog, showCreateDialog, refresh]);
+  }, [
+    showFakerDialog,
+    showDeleteAllDialog,
+    showEditDialog,
+    showCreateDialog,
+    refresh,
+  ]);
 
   const onClickSaveFilteredfields = (ff) => {
     console.debug(ff);
@@ -244,25 +250,25 @@ const CompanyAddressesPage = (props) => {
     },
     permissions.import
       ? {
-        label: "Import",
-        icon: "pi pi-upload",
-        command: () => setShowUpload(true),
-      }
+          label: "Import",
+          icon: "pi pi-upload",
+          command: () => setShowUpload(true),
+        }
       : null,
     permissions.export
       ? {
-        label: "Export",
-        icon: "pi pi-download",
-        command: () => {
-          data.length > 0
-            ? setTriggerDownload(true)
-            : props.alert({
-              title: "Export",
-              type: "warn",
-              message: "no data to export",
-            });
-        },
-      }
+          label: "Export",
+          icon: "pi pi-download",
+          command: () => {
+            data.length > 0
+              ? setTriggerDownload(true)
+              : props.alert({
+                  title: "Export",
+                  type: "warn",
+                  message: "no data to export",
+                });
+          },
+        }
       : null,
     {
       label: "Help",
@@ -272,35 +278,35 @@ const CompanyAddressesPage = (props) => {
     { separator: true },
     process.env.REACT_APP_ENV == "development"
       ? {
-        label: "Testing",
-        icon: "pi pi-check-circle",
-        items: [
-          {
-            label: "Faker",
-            icon: "pi pi-bullseye",
-            command: (e) => {
-              setShowFakerDialog(true);
+          label: "Testing",
+          icon: "pi pi-check-circle",
+          items: [
+            {
+              label: "Faker",
+              icon: "pi pi-bullseye",
+              command: (e) => {
+                setShowFakerDialog(true);
+              },
+              show: true,
             },
-            show: true,
-          },
-          {
-            label: `Drop ${data?.length}`,
-            icon: "pi pi-trash",
-            command: (e) => {
-              setShowDeleteAllDialog(true);
+            {
+              label: `Drop ${data?.length}`,
+              icon: "pi pi-trash",
+              command: (e) => {
+                setShowDeleteAllDialog(true);
+              },
             },
-          },
-        ],
-      }
+          ],
+        }
       : null,
     permissions.seeder
       ? {
-        label: "Data seeder",
-        icon: "pi pi-database",
-        command: (e) => {
-          setShowSeederDialog(true);
-        },
-      }
+          label: "Data seeder",
+          icon: "pi pi-database",
+          command: (e) => {
+            setShowSeederDialog(true);
+          },
+        }
       : null,
   ].filter(Boolean);
 
@@ -417,14 +423,16 @@ const CompanyAddressesPage = (props) => {
     const tabId = getOrSetTabId();
     const response = await props.get();
     const currentCache = response?.results;
-    const selectedUser = localStorage.getItem(`selectedUser_${tabId}`) || currentCache?.selectedUser;
+    const selectedUser =
+      localStorage.getItem(`selectedUser_${tabId}`) ||
+      currentCache?.selectedUser;
     setSelectedUser(selectedUser);
-  
+
     if (currentCache && selectedUser) {
       const selectedUserProfile = currentCache.profiles.find(
         (profile) => profile.profileId === selectedUser,
       );
-  
+
       if (selectedUserProfile) {
         const paginatorRecordsNo = _.get(
           selectedUserProfile,
@@ -433,7 +441,7 @@ const CompanyAddressesPage = (props) => {
         );
         setPaginatorRecordsNo(paginatorRecordsNo);
         console.log("PaginatorRecordsNo from cache:", paginatorRecordsNo);
-        return; 
+        return;
       }
     }
     try {
@@ -442,7 +450,7 @@ const CompanyAddressesPage = (props) => {
         .get(selectedUser, {
           query: { $populate: ["position"] },
         });
-  
+
       const paginatorRecordsNo = _.get(
         profileResponse,
         "preferences.settings.companyAddresses.paginatorRecordsNo",
@@ -462,7 +470,7 @@ const CompanyAddressesPage = (props) => {
       const currentCache = response?.results;
       const selectedUser = localStorage.getItem(`selectedUser_${tabId}`);
       setSelectedUser(selectedUser || currentCache.selectedUser);
-      
+
       if (currentCache && selectedUser) {
         const selectedUserProfileIndex = currentCache.profiles.findIndex(
           (profile) => profile.profileId === selectedUser,
@@ -483,8 +491,7 @@ const CompanyAddressesPage = (props) => {
         console.warn("Cache or selectedUser is not available.");
       }
     };
-      updateCache();
-    
+    updateCache();
   }, [paginatorRecordsNo, selectedUser]);
 
   useEffect(() => {
@@ -548,22 +555,22 @@ const CompanyAddressesPage = (props) => {
             <strong>Addresses </strong>
           </h4>
           {permissions.read ? (
-          <SplitButton
-            model={menuItems.filter(
-              (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
-            )}
-            dropdownIcon="pi pi-ellipsis-h"
-            buttonClassName="hidden"
-            menuButtonClassName="ml-1 p-button-text"
-          />   ) : null}
+            <SplitButton
+              model={menuItems.filter(
+                (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
+              )}
+              dropdownIcon="pi pi-ellipsis-h"
+              buttonClassName="hidden"
+              menuButtonClassName="ml-1 p-button-text"
+            />
+          ) : null}
         </div>
         <div className="col-6 flex justify-content-end">
           <>
-           <FavouriteService
-                        favouriteItem={favouriteItem}
-                        serviceName="companyAddresses"
-                      />
-            {" "}
+            <FavouriteService
+              favouriteItem={favouriteItem}
+              serviceName="companyAddresses"
+            />{" "}
             <SplitButton
               model={filterMenuItems.filter(
                 (m) => !(m.icon === "pi pi-trash" && data?.length === 0),
@@ -592,16 +599,17 @@ const CompanyAddressesPage = (props) => {
               menuButtonClassName="ml-1 p-button-text"
               menuStyle={{ width: "200px" }}
             ></SplitButton>
-                        {permissions.create ? (
-            <Button
-              label="add"
-              style={{ height: "30px", marginRight: "10px" }}
-              rounded
-              loading={loading}
-              icon="pi pi-plus"
-              onClick={() => setShowCreateDialog(true)}
-              role="companyAddresses-add-button"
-            />          ) : null}
+            {permissions.create ? (
+              <Button
+                label="add"
+                style={{ height: "30px", marginRight: "10px" }}
+                rounded
+                loading={loading}
+                icon="pi pi-plus"
+                onClick={() => setShowCreateDialog(true)}
+                role="companyAddresses-add-button"
+              />
+            ) : null}
           </>
         </div>
       </div>
@@ -682,7 +690,11 @@ const CompanyAddressesPage = (props) => {
         onYes={() => deleteAll()}
         loading={loading}
       />
-        <HelpbarService isVisible={isHelpSidebarVisible} onToggle={toggleHelpSidebar} serviceName="companyAddresses" />
+      <HelpbarService
+        isVisible={isHelpSidebarVisible}
+        onToggle={toggleHelpSidebar}
+        serviceName="companyAddresses"
+      />
     </div>
   );
 };

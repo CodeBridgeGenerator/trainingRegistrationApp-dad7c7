@@ -16,13 +16,7 @@
   "stack": [
     {
       "appName": "nodejs-backend",
-      "environments": [
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
+      "environments": [null, null, null, null, null],
       "pathToLogo": {
         "s": "/assets/applications_logos/nodejs-s.png",
         "l": "/assets/applications_logos/nodejs.png"
@@ -34,13 +28,7 @@
     },
     {
       "appName": "react-frontend",
-      "environments": [
-        null,
-        null,
-        null,
-        null,
-        null
-      ],
+      "environments": [null, null, null, null, null],
       "pathToLogo": {
         "s": "/assets/applications_logos/react-s.png",
         "l": "/assets/applications_logos/react.png"
@@ -517,9 +505,7 @@
             "refServiceName": "courseCategory",
             "refDatabaseName": "courseCategory",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "name"
-            ]
+            "identifierFieldName": ["name"]
           }
         },
         {
@@ -678,9 +664,7 @@
             "refServiceName": "courses",
             "refDatabaseName": "courses",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "title"
-            ]
+            "identifierFieldName": ["title"]
           }
         },
         {
@@ -1027,9 +1011,7 @@
             "refServiceName": "cohort",
             "refDatabaseName": "cohort",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "name"
-            ]
+            "identifierFieldName": ["name"]
           }
         },
         {
@@ -1077,9 +1059,7 @@
             "refServiceName": "profiles",
             "refDatabaseName": "profiles",
             "relationshipType": "one-to-one",
-            "identifierFieldName": [
-              "name"
-            ]
+            "identifierFieldName": ["name"]
           }
         },
         {

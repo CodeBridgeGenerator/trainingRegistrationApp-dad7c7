@@ -428,7 +428,7 @@ const AuditsPage = (props) => {
           />
         </div>
       </div>
-         <DownloadCSV
+      <DownloadCSV
         data={data}
         fileName={filename}
         triggerDownload={triggerDownload}
@@ -471,7 +471,11 @@ const AuditsPage = (props) => {
         onYes={() => deleteAll()}
         loading={loading}
       />
-   <HelpbarService isVisible={isHelpSidebarVisible} onToggle={toggleHelpSidebar} serviceName="audits" />
+      <HelpbarService
+        isVisible={isHelpSidebarVisible}
+        onToggle={toggleHelpSidebar}
+        serviceName="audits"
+      />
     </div>
   );
 };

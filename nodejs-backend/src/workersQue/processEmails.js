@@ -1,27 +1,27 @@
-const { Queue, Worker } = require('bullmq');
-const connection = require('../cbServices/redis/config');
-const sendMailService = require('../cbServices/nodeMailer/sendMailService');
+const { Queue, Worker } = require("bullmq");
+const connection = require("../cbServices/redis/config");
+const sendMailService = require("../cbServices/nodeMailer/sendMailService");
 
 // Create and export the job queue
-const mailQues = new Queue('mailQues', { connection });
+const mailQues = new Queue("mailQues", { connection });
 
 const createMailQueWorker = (app) => {
-  const superAdmin = 'mehalamohan1999@gmail.com';
+  const superAdmin = "mehalamohan1999@gmail.com";
   const worker = new Worker(
-    'mailQues',
+    "mailQues",
     async (job) => {
       const { data } = job;
-      console.debug('job data', data);
+      console.debug("job data", data);
       // Add your job processing logic here
       const template = await app
-        .service('templates')
+        .service("templates")
         .find({ query: { name: data.templateId } });
 
       if (!template.data.length === 0)
         throw Error(`Template ${data.templateId} not found, please create.`);
 
       const templateContent = template.data[0];
-      if (typeof templateContent === 'undefined')
+      if (typeof templateContent === "undefined")
         throw `email template not found => ${data.templateId}`;
 
       let subject = templateContent.subject;
@@ -37,7 +37,7 @@ const createMailQueWorker = (app) => {
           contentHTML = contentHTML.replace(`{{${k[0]}}}`, k[1]);
         });
       }
-      app.service('mailQues').patch(job.data._id, {
+      app.service("mailQues").patch(job.data._id, {
         jobId: job.id,
         content: contentHTML,
       });
@@ -60,10 +60,10 @@ const createMailQueWorker = (app) => {
   );
 
   // Event listeners for worker
-  worker.on('completed', (job) => {
+  worker.on("completed", (job) => {
     console.debug(`Mail ${job.id} completed successfully`);
     if (job.data) {
-      app.service('mailQues').patch(job.data._id, {
+      app.service("mailQues").patch(job.data._id, {
         jobId: job.id,
         end: new Date(),
         status: true,
@@ -71,19 +71,19 @@ const createMailQueWorker = (app) => {
     }
   });
 
-  worker.on('failed', async (job, err) => {
+  worker.on("failed", async (job, err) => {
     console.error(`Mail ${job.id} failed with error ${err.message}`);
     if (job.data) {
-      app.service('mailQues').patch(job.data._id, {
+      app.service("mailQues").patch(job.data._id, {
         jobId: job.id,
         end: new Date(),
         data: { ...job.data },
         errorMessage: err.message,
         status: false,
       });
-      job.data['errors'] = err.message;
-      job.data['project'] = process.env.PROJECT_NAME;
-      job.data['env'] = process.env.ENV;
+      job.data["errors"] = err.message;
+      job.data["project"] = process.env.PROJECT_NAME;
+      job.data["env"] = process.env.ENV;
 
       await sendMailService(
         job.data.name,
@@ -95,7 +95,7 @@ const createMailQueWorker = (app) => {
         [],
       );
     }
-    if (err.message === 'job stalled more than allowable limit') {
+    if (err.message === "job stalled more than allowable limit") {
       await job.remove().catch((err) => {
         console.error(
           `jobId: ${job.id} ,  remove error : ${err.message} , ${err.stack}`,
@@ -104,14 +104,14 @@ const createMailQueWorker = (app) => {
     }
   });
 
-  const mailQuesService = app.service('mailQues');
+  const mailQuesService = app.service("mailQues");
   mailQuesService.hooks({
     after: {
       create: async (context) => {
         const { result } = context;
         if (result.recipients.length > 0)
-          if (typeof result.hook === 'undefined')
-            await mailQues.add('mailQues', result);
+          if (typeof result.hook === "undefined")
+            await mailQues.add("mailQues", result);
         return context;
       },
     },

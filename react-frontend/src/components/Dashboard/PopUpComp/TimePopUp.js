@@ -1,4 +1,4 @@
-// src/components/ChartComponents/ThisWeek.js
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { classNames } from "primereact/utils";
 import Down from "../../../assets/media/Down Small.png";

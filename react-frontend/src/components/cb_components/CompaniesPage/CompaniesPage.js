@@ -67,7 +67,6 @@ const CompaniesPage = (props) => {
     }
   }, [selectedUser]);
 
-
   const toggleHelpSidebar = () => {
     setHelpSidebarVisible(!isHelpSidebarVisible);
   };
@@ -270,25 +269,25 @@ const CompaniesPage = (props) => {
     },
     permissions.import
       ? {
-        label: "Import",
-        icon: "pi pi-upload",
-        command: () => setShowUpload(true),
-      }
+          label: "Import",
+          icon: "pi pi-upload",
+          command: () => setShowUpload(true),
+        }
       : null,
     permissions.export
       ? {
-        label: "Export",
-        icon: "pi pi-download",
-        command: () => {
-          data.length > 0
-            ? setTriggerDownload(true)
-            : props.alert({
-              title: "Export",
-              type: "warn",
-              message: "no data to export",
-            });
-        },
-      }
+          label: "Export",
+          icon: "pi pi-download",
+          command: () => {
+            data.length > 0
+              ? setTriggerDownload(true)
+              : props.alert({
+                  title: "Export",
+                  type: "warn",
+                  message: "no data to export",
+                });
+          },
+        }
       : null,
     {
       label: "Help",
@@ -298,35 +297,35 @@ const CompaniesPage = (props) => {
     { separator: true },
     process.env.REACT_APP_ENV == "development"
       ? {
-        label: "Testing",
-        icon: "pi pi-check-circle",
-        items: [
-          {
-            label: "Faker",
-            icon: "pi pi-bullseye",
-            command: (e) => {
-              setShowFakerDialog(true);
+          label: "Testing",
+          icon: "pi pi-check-circle",
+          items: [
+            {
+              label: "Faker",
+              icon: "pi pi-bullseye",
+              command: (e) => {
+                setShowFakerDialog(true);
+              },
+              show: true,
             },
-            show: true,
-          },
-          {
-            label: `Drop ${data?.length}`,
-            icon: "pi pi-trash",
-            command: (e) => {
-              setShowDeleteAllDialog(true);
+            {
+              label: `Drop ${data?.length}`,
+              icon: "pi pi-trash",
+              command: (e) => {
+                setShowDeleteAllDialog(true);
+              },
             },
-          },
-        ],
-      }
+          ],
+        }
       : null,
     permissions.seeder
       ? {
-        label: "Data seeder",
-        icon: "pi pi-database",
-        command: (e) => {
-          setShowSeederDialog(true);
-        },
-      }
+          label: "Data seeder",
+          icon: "pi pi-database",
+          command: (e) => {
+            setShowSeederDialog(true);
+          },
+        }
       : null,
   ].filter(Boolean);
 
@@ -379,7 +378,7 @@ const CompaniesPage = (props) => {
           {item.label}
         </div>
       ),
-      command: () => { },
+      command: () => {},
     },
     { separator: true },
     { label: "Name Ascending", command: () => onMenuSort("nameAsc") },
@@ -422,14 +421,16 @@ const CompaniesPage = (props) => {
     const tabId = getOrSetTabId();
     const response = await props.get();
     const currentCache = response?.results;
-    const selectedUser = localStorage.getItem(`selectedUser_${tabId}`) || currentCache?.selectedUser;
+    const selectedUser =
+      localStorage.getItem(`selectedUser_${tabId}`) ||
+      currentCache?.selectedUser;
     setSelectedUser(selectedUser);
-  
+
     if (currentCache && selectedUser) {
       const selectedUserProfile = currentCache.profiles.find(
         (profile) => profile.profileId === selectedUser,
       );
-  
+
       if (selectedUserProfile) {
         const paginatorRecordsNo = _.get(
           selectedUserProfile,
@@ -438,7 +439,7 @@ const CompaniesPage = (props) => {
         );
         setPaginatorRecordsNo(paginatorRecordsNo);
         console.log("PaginatorRecordsNo from cache:", paginatorRecordsNo);
-        return; 
+        return;
       }
     }
     try {
@@ -447,7 +448,7 @@ const CompaniesPage = (props) => {
         .get(selectedUser, {
           query: { $populate: ["position"] },
         });
-  
+
       const paginatorRecordsNo = _.get(
         profileResponse,
         "preferences.settings.companies.paginatorRecordsNo",
@@ -467,7 +468,7 @@ const CompaniesPage = (props) => {
       const currentCache = response?.results;
       const selectedUser = localStorage.getItem(`selectedUser_${tabId}`);
       setSelectedUser(selectedUser || currentCache.selectedUser);
-      
+
       if (currentCache && selectedUser) {
         const selectedUserProfileIndex = currentCache.profiles.findIndex(
           (profile) => profile.profileId === selectedUser,
@@ -488,8 +489,7 @@ const CompaniesPage = (props) => {
         console.warn("Cache or selectedUser is not available.");
       }
     };
-      updateCache();
-    
+    updateCache();
   }, [paginatorRecordsNo, selectedUser]);
 
   useEffect(() => {
@@ -540,7 +540,6 @@ const CompaniesPage = (props) => {
     }
   }, [selectedUser]);
 
-
   return (
     <div className="mt-5">
       <div className="grid">
@@ -578,7 +577,7 @@ const CompaniesPage = (props) => {
               }
               buttonClassName="hidden"
               menuButtonClassName="ml-1 p-button-text"
-            // menuStyle={{ width: "250px" }}
+              // menuStyle={{ width: "250px" }}
             ></SplitButton>
             <SplitButton
               model={sortMenuItems.filter(
@@ -685,7 +684,11 @@ const CompaniesPage = (props) => {
         onYes={() => deleteAll()}
         loading={loading}
       />
-      <HelpbarService isVisible={isHelpSidebarVisible} onToggle={toggleHelpSidebar} serviceName="companies" />
+      <HelpbarService
+        isVisible={isHelpSidebarVisible}
+        onToggle={toggleHelpSidebar}
+        serviceName="companies"
+      />
     </div>
   );
 };

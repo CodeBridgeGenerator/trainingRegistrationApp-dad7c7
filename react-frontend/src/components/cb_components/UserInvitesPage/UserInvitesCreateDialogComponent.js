@@ -225,7 +225,9 @@ const UserInvitesCreateDialogComponent = (props) => {
         );
         set_entity((prev) => ({
           ...prev,
-          positions: prev.positions.filter((id) => id !== selectedPosition.code),
+          positions: prev.positions.filter(
+            (id) => id !== selectedPosition.code,
+          ),
           roles: prev.roles.filter((id) => id !== roleId),
         }));
       } else {

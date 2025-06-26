@@ -145,11 +145,14 @@ const SingleRolesPage = (props) => {
           </div>
         </div>
         <div className="mt-2">
-<TabView>                <TabPanel header="true" leftIcon="pi pi-building-columns mr-2">
-                  <PositionsPage />
-                </TabPanel>
+          <TabView>
+            {" "}
+            <TabPanel header="true" leftIcon="pi pi-building-columns mr-2">
+              <PositionsPage />
+            </TabPanel>
           </TabView>
-        </div>        <CommentsSection
+        </div>{" "}
+        <CommentsSection
           recordId={urlParams.singleRolesId}
           user={props.user}
           alert={props.alert}

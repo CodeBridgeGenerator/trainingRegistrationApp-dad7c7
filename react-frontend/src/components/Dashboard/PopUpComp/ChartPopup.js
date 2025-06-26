@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { classNames } from "primereact/utils"; // Ensure classNames is imported
 import Edit from "../../../assets/media/Edit.png"; // Import the Trash icon

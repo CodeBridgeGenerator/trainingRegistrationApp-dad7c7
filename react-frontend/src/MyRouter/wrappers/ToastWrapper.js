@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { Toast } from "primereact/toast";

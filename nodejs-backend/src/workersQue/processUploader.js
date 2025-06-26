@@ -1,16 +1,16 @@
-const { Queue, Worker } = require('bullmq');
-const connection = require('../cbServices/redis/config');
-const config = require('../resources/config.json');
-const _ = require('lodash');
+const { Queue, Worker } = require("bullmq");
+const connection = require("../cbServices/redis/config");
+const config = require("../resources/config.json");
+const _ = require("lodash");
 
 // Create and export the job queue
-const jobQueue = new Queue('uploaderQue', { connection });
+const jobQueue = new Queue("uploaderQue", { connection });
 const adminUser = process.env.MAIL_USERNAME;
 
 // Create and export the worker
 const createUploader = (app) => {
   const worker = new Worker(
-    'uploaderQue',
+    "uploaderQue",
     async (job) => {
       const { data } = job;
       const serviceName = data.serviceName;
@@ -20,7 +20,7 @@ const createUploader = (app) => {
       const fieldReferencePromises = service.schemaList
         .filter((field) => {
           // console.debug("field",field.reference.refServiceName);
-          return typeof field.reference.refServiceName !== 'undefined';
+          return typeof field.reference.refServiceName !== "undefined";
         })
         .map((field) => {
           return {
@@ -33,14 +33,14 @@ const createUploader = (app) => {
       // console.debug("promises", promises);
       const fieldReference = service.schemaList
         .filter(
-          (field) => typeof field.reference.refServiceName !== 'undefined',
+          (field) => typeof field.reference.refServiceName !== "undefined",
         )
         .map((field, i) => {
           return {
             ref: field.reference.refServiceName,
             fieldName: field.fieldName,
             label: field.label,
-            identifierFieldName: field.reference.identifierFieldName.join(','),
+            identifierFieldName: field.reference.identifierFieldName.join(","),
             data: promises[i].data,
           };
         });
@@ -66,7 +66,7 @@ const createUploader = (app) => {
               } else newObj[key] = row[key];
             });
           });
-          console.debug('newCreate', newObj);
+          console.debug("newCreate", newObj);
           // app.service(serviceName).create(create);
         });
       }
@@ -75,11 +75,11 @@ const createUploader = (app) => {
   );
 
   // Event listeners for worker
-  worker.on('completed', (job) => {
+  worker.on("completed", (job) => {
     console.debug(`Loader ${job.id} completed successfully`);
     const _mail = {
-      name: 'data loader successful',
-      type: 'uploader',
+      name: "data loader successful",
+      type: "uploader",
       from: adminUser,
       recipients: [job.data.user.email],
       data: {
@@ -87,32 +87,34 @@ const createUploader = (app) => {
         serviceName: job.data.serviceName,
       },
       status: true,
-      subject: 'uploader job processing',
-      templateId: 'onUploaderSuccess',
+      subject: "uploader job processing",
+      templateId: "onUploaderSuccess",
     };
-    app.service('mailQues').create(_mail);
+    app.service("mailQues").create(_mail);
   });
 
-  worker.on('failed', async (job, err) => {
+  worker.on("failed", async (job, err) => {
     console.error(`Job ${job.id} failed with error ${err.message}`);
     const _mail = {
-      name: 'data loader failed job',
-      type: 'uploader',
+      name: "data loader failed job",
+      type: "uploader",
       from: adminUser,
       recipients: [job.data.user.email, adminUser],
       data: {
         name: job.data.user.name,
         serviceName: job.data.serviceName,
         ...job.data,
-        projectLabel: process.env.PROJECT_LABEL ? process.env.PROJECT_LABEL : process.env.PROJECT_NAME,
+        projectLabel: process.env.PROJECT_LABEL
+          ? process.env.PROJECT_LABEL
+          : process.env.PROJECT_NAME,
       },
       status: false,
-      subject: 'uploader job processing',
-      templateId: 'onUploaderFailed',
+      subject: "uploader job processing",
+      templateId: "onUploaderFailed",
       errorMessage: err.message,
     };
-    app.service('mailQues').create(_mail);
-    if (err.message === 'job stalled more than allowable limit') {
+    app.service("mailQues").create(_mail);
+    if (err.message === "job stalled more than allowable limit") {
       await job.remove().catch((err) => {
         console.error(
           `jobId: ${job.id} ,  remove error : ${err.message} , ${err.stack}`,
@@ -121,12 +123,12 @@ const createUploader = (app) => {
     }
   });
 
-  const uploaderQueService = app.service('uploader');
+  const uploaderQueService = app.service("uploader");
   uploaderQueService.hooks({
     after: {
       create: async (context) => {
         const { result } = context;
-        await jobQueue.add('uploaderQue', result);
+        await jobQueue.add("uploaderQue", result);
         return context;
       },
     },

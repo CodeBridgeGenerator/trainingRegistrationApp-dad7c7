@@ -139,7 +139,7 @@ const SingleCompaniesPage = (props) => {
 
   const handleEditNavigation = () => {
     console.log("_entity:", companyId);
-    navigate(`/companies/edit/${companyId}`); 
+    navigate(`/companies/edit/${companyId}`);
   };
 
   return (
@@ -246,7 +246,7 @@ const SingleCompaniesPage = (props) => {
           newRecentItem={newRecentItem}
         />
       )}
-      
+
       <div
         id="rightsidebar"
         className={classNames(

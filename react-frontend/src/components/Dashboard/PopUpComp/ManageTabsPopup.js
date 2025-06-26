@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import Data from "../../../assets/media/Data.png"; // Importing the image
 import Users from "../../../assets/media/Users.png";

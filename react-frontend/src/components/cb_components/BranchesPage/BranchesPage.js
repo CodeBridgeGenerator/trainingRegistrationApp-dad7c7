@@ -53,7 +53,6 @@ const BranchesPage = (props) => {
   const [refresh, setRefresh] = useState(false);
   const [paginatorRecordsNo, setPaginatorRecordsNo] = useState(10);
 
-
   const getOrSetTabId = () => {
     let tabId = sessionStorage.getItem("browserTabId");
     if (!tabId) {
@@ -70,7 +69,6 @@ const BranchesPage = (props) => {
     }
   }, [selectedUser]);
 
-  
   const toggleHelpSidebar = () => {
     setHelpSidebarVisible(!isHelpSidebarVisible);
   };
@@ -271,25 +269,25 @@ const BranchesPage = (props) => {
     },
     permissions.import
       ? {
-        label: "Import",
-        icon: "pi pi-upload",
-        command: () => setShowUpload(true),
-      }
+          label: "Import",
+          icon: "pi pi-upload",
+          command: () => setShowUpload(true),
+        }
       : null,
     permissions.export
       ? {
-        label: "Export",
-        icon: "pi pi-download",
-        command: () => {
-          data.length > 0
-            ? setTriggerDownload(true)
-            : props.alert({
-              title: "Export",
-              type: "warn",
-              message: "no data to export",
-            });
-        },
-      }
+          label: "Export",
+          icon: "pi pi-download",
+          command: () => {
+            data.length > 0
+              ? setTriggerDownload(true)
+              : props.alert({
+                  title: "Export",
+                  type: "warn",
+                  message: "no data to export",
+                });
+          },
+        }
       : null,
     {
       label: "Help",
@@ -299,35 +297,35 @@ const BranchesPage = (props) => {
     { separator: true },
     process.env.REACT_APP_ENV == "development"
       ? {
-        label: "Testing",
-        icon: "pi pi-check-circle",
-        items: [
-          {
-            label: "Faker",
-            icon: "pi pi-bullseye",
-            command: (e) => {
-              setShowFakerDialog(true);
+          label: "Testing",
+          icon: "pi pi-check-circle",
+          items: [
+            {
+              label: "Faker",
+              icon: "pi pi-bullseye",
+              command: (e) => {
+                setShowFakerDialog(true);
+              },
+              show: true,
             },
-            show: true,
-          },
-          {
-            label: `Drop ${data?.length}`,
-            icon: "pi pi-trash",
-            command: (e) => {
-              setShowDeleteAllDialog(true);
+            {
+              label: `Drop ${data?.length}`,
+              icon: "pi pi-trash",
+              command: (e) => {
+                setShowDeleteAllDialog(true);
+              },
             },
-          },
-        ],
-      }
+          ],
+        }
       : null,
     permissions.seeder
       ? {
-        label: "Data seeder",
-        icon: "pi pi-database",
-        command: (e) => {
-          setShowSeederDialog(true);
-        },
-      }
+          label: "Data seeder",
+          icon: "pi pi-database",
+          command: (e) => {
+            setShowSeederDialog(true);
+          },
+        }
       : null,
   ].filter(Boolean);
 
@@ -423,14 +421,16 @@ const BranchesPage = (props) => {
     const tabId = getOrSetTabId();
     const response = await props.get();
     const currentCache = response?.results;
-    const selectedUser = localStorage.getItem(`selectedUser_${tabId}`) || currentCache?.selectedUser;
+    const selectedUser =
+      localStorage.getItem(`selectedUser_${tabId}`) ||
+      currentCache?.selectedUser;
     setSelectedUser(selectedUser);
-  
+
     if (currentCache && selectedUser) {
       const selectedUserProfile = currentCache.profiles.find(
         (profile) => profile.profileId === selectedUser,
       );
-  
+
       if (selectedUserProfile) {
         const paginatorRecordsNo = _.get(
           selectedUserProfile,
@@ -439,7 +439,7 @@ const BranchesPage = (props) => {
         );
         setPaginatorRecordsNo(paginatorRecordsNo);
         console.log("PaginatorRecordsNo from cache:", paginatorRecordsNo);
-        return; 
+        return;
       }
     }
     try {
@@ -448,7 +448,7 @@ const BranchesPage = (props) => {
         .get(selectedUser, {
           query: { $populate: ["position"] },
         });
-  
+
       const paginatorRecordsNo = _.get(
         profileResponse,
         "preferences.settings.branches.paginatorRecordsNo",
@@ -468,7 +468,7 @@ const BranchesPage = (props) => {
       const currentCache = response?.results;
       const selectedUser = localStorage.getItem(`selectedUser_${tabId}`);
       setSelectedUser(selectedUser || currentCache.selectedUser);
-      
+
       if (currentCache && selectedUser) {
         const selectedUserProfileIndex = currentCache.profiles.findIndex(
           (profile) => profile.profileId === selectedUser,
@@ -489,10 +489,8 @@ const BranchesPage = (props) => {
         console.warn("Cache or selectedUser is not available.");
       }
     };
-      updateCache();
-    
+    updateCache();
   }, [paginatorRecordsNo, selectedUser]);
-
 
   useEffect(() => {
     const fetchPermissions = async () => {
@@ -685,7 +683,11 @@ const BranchesPage = (props) => {
         onYes={() => deleteAll()}
         loading={loading}
       />
- <HelpbarService isVisible={isHelpSidebarVisible} onToggle={toggleHelpSidebar} serviceName="branches" />
+      <HelpbarService
+        isVisible={isHelpSidebarVisible}
+        onToggle={toggleHelpSidebar}
+        serviceName="branches"
+      />
     </div>
   );
 };

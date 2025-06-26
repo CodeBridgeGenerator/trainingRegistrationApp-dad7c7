@@ -68,7 +68,6 @@ const ProfilesPage = (props) => {
     }
   }, [selectedUser]);
 
-
   const calendar_24Template5 = (rowData, { rowIndex }) => (
     <p>
       {rowData.startTime
@@ -83,7 +82,6 @@ const ProfilesPage = (props) => {
         : "null"}
     </p>
   );
-
 
   const toggleHelpSidebar = () => {
     setHelpSidebarVisible(!isHelpSidebarVisible);
@@ -213,7 +211,13 @@ const ProfilesPage = (props) => {
           message: error.message || "Failed get Profiles",
         });
       });
-  }, [showFakerDialog, showDeleteAllDialog, showEditDialog, showCreateDialog, refresh]);
+  }, [
+    showFakerDialog,
+    showDeleteAllDialog,
+    showEditDialog,
+    showCreateDialog,
+    refresh,
+  ]);
 
   const onClickSaveFilteredfields = (ff) => {
     console.debug(ff);
@@ -311,27 +315,26 @@ const ProfilesPage = (props) => {
       command: () => copyPageLink(),
     },
     permissions.import
-      ?
-      {
-        label: "Import",
-        icon: "pi pi-upload",
-        command: () => setShowUpload(true),
-      }
+      ? {
+          label: "Import",
+          icon: "pi pi-upload",
+          command: () => setShowUpload(true),
+        }
       : null,
     permissions.export
       ? {
-        label: "Export",
-        icon: "pi pi-download",
-        command: () => {
-          data.length > 0
-            ? setTriggerDownload(true)
-            : props.alert({
-              title: "Export",
-              type: "warn",
-              message: "no data to export",
-            });
-        },
-      }
+          label: "Export",
+          icon: "pi pi-download",
+          command: () => {
+            data.length > 0
+              ? setTriggerDownload(true)
+              : props.alert({
+                  title: "Export",
+                  type: "warn",
+                  message: "no data to export",
+                });
+          },
+        }
       : null,
     {
       label: "Help",
@@ -341,35 +344,35 @@ const ProfilesPage = (props) => {
     { separator: true },
     process.env.REACT_APP_ENV == "development"
       ? {
-        label: "Testing",
-        icon: "pi pi-check-circle",
-        items: [
-          {
-            label: "Faker",
-            icon: "pi pi-bullseye",
-            command: (e) => {
-              setShowFakerDialog(true);
+          label: "Testing",
+          icon: "pi pi-check-circle",
+          items: [
+            {
+              label: "Faker",
+              icon: "pi pi-bullseye",
+              command: (e) => {
+                setShowFakerDialog(true);
+              },
+              show: true,
             },
-            show: true,
-          },
-          {
-            label: `Drop ${data?.length}`,
-            icon: "pi pi-trash",
-            command: (e) => {
-              setShowDeleteAllDialog(true);
+            {
+              label: `Drop ${data?.length}`,
+              icon: "pi pi-trash",
+              command: (e) => {
+                setShowDeleteAllDialog(true);
+              },
             },
-          },
-        ],
-      }
+          ],
+        }
       : null,
     permissions.seeder
       ? {
-        label: "Data seeder",
-        icon: "pi pi-database",
-        command: (e) => {
-          setShowSeederDialog(true);
-        },
-      }
+          label: "Data seeder",
+          icon: "pi pi-database",
+          command: (e) => {
+            setShowSeederDialog(true);
+          },
+        }
       : null,
   ].filter(Boolean);
 
@@ -422,7 +425,7 @@ const ProfilesPage = (props) => {
           {item.label}
         </div>
       ),
-      command: () => { },
+      command: () => {},
     },
     { separator: true },
     { label: "Name Ascending", command: () => onMenuSort("nameAsc") },
@@ -465,7 +468,9 @@ const ProfilesPage = (props) => {
     const tabId = getOrSetTabId();
     const response = await props.get();
     const currentCache = response?.results;
-    const selectedUser = localStorage.getItem(`selectedUser_${tabId}`) || currentCache?.selectedUser;
+    const selectedUser =
+      localStorage.getItem(`selectedUser_${tabId}`) ||
+      currentCache?.selectedUser;
     setSelectedUser(selectedUser);
 
     if (currentCache && selectedUser) {
@@ -532,7 +537,6 @@ const ProfilesPage = (props) => {
       }
     };
     updateCache();
-
   }, [paginatorRecordsNo, selectedUser]);
 
   useEffect(() => {
@@ -603,15 +607,15 @@ const ProfilesPage = (props) => {
               dropdownIcon="pi pi-ellipsis-h"
               buttonClassName="hidden"
               menuButtonClassName="ml-1 p-button-text"
-            />) : null}
+            />
+          ) : null}
         </div>
         <div className="col-6 flex justify-content-end">
           <>
             <FavouriteService
               favouriteItem={favouriteItem}
               serviceName="profiles"
-            />
-            {" "}
+            />{" "}
             <SplitButton
               model={filterMenuItems.filter(
                 (m) => !(m.icon === "pi pi-trash" && data?.length === 0),
@@ -624,7 +628,7 @@ const ProfilesPage = (props) => {
               }
               buttonClassName="hidden"
               menuButtonClassName="ml-1 p-button-text"
-            // menuStyle={{ width: "250px" }}
+              // menuStyle={{ width: "250px" }}
             ></SplitButton>
             <SplitButton
               model={sortMenuItems.filter(
@@ -649,7 +653,8 @@ const ProfilesPage = (props) => {
                 icon="pi pi-plus"
                 onClick={() => setShowCreateDialog(true)}
                 role="profiles-add-button"
-              />) : null}
+              />
+            ) : null}
           </>
         </div>
       </div>
@@ -730,7 +735,11 @@ const ProfilesPage = (props) => {
         onYes={() => deleteAll()}
         loading={loading}
       />
-      <HelpbarService isVisible={isHelpSidebarVisible} onToggle={toggleHelpSidebar} serviceName="profiles" />
+      <HelpbarService
+        isVisible={isHelpSidebarVisible}
+        onToggle={toggleHelpSidebar}
+        serviceName="profiles"
+      />
     </div>
   );
 };

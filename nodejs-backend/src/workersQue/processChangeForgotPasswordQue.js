@@ -1,5 +1,5 @@
 const { Queue, Worker } = require("bullmq");
-const connection = require("../services/redis/config");
+const connection = require("../cbServices/redis/config");
 const { decryptData, encryptData } = require("../utils/encryption");
 
 const jobQueue = new Queue("jobUserChangeForgotPassword", { connection });
@@ -10,7 +10,7 @@ const createChangeForgotPasswordQueWorker = (app) => {
     "jobUserChangeForgotPassword",
     async (job) => {
       const { data } = job;
-      console.log("decrypted data in worker", data)
+      console.log("decrypted data in worker", data);
       if (data.userEmail) {
         const userData = await app
           .service("users")
@@ -95,7 +95,6 @@ const createChangeForgotPasswordQueWorker = (app) => {
     }
   });
 
-
   const userChangePasswordService = app.service("userChangePassword");
   userChangePasswordService.hooks({
     after: {
@@ -103,7 +102,7 @@ const createChangeForgotPasswordQueWorker = (app) => {
         try {
           console.log("Create hook - context.result:", context.result);
           await jobQueue.add("jobUserChangeForgotPassword", {
-            encrypted: context.result.encrypted || encryptData(context.result)
+            encrypted: context.result.encrypted || encryptData(context.result),
           });
         } catch (error) {
           console.error("Create hook error:", error);
@@ -114,7 +113,7 @@ const createChangeForgotPasswordQueWorker = (app) => {
         try {
           console.log("Patch hook - raw result:", context.result);
           const payload = {
-            encrypted: context.result.encrypted || encryptData(context.result)
+            encrypted: context.result.encrypted || encryptData(context.result),
           };
           console.log("Original job data:", JSON.stringify(payload, null, 2));
 
@@ -129,16 +128,13 @@ const createChangeForgotPasswordQueWorker = (app) => {
           console.log("Decrypted data:", JSON.stringify(decrypted, null, 2));
 
           await jobQueue.add("jobUserChangeForgotPassword", decrypted);
-
         } catch (error) {
           console.error("Patch hook error:", error);
         }
         return context;
-      }
-    }
+      },
+    },
   });
 };
-
-
 
 module.exports = { createChangeForgotPasswordQueWorker };

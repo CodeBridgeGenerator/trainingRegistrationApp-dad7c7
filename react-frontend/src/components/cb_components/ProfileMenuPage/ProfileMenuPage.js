@@ -447,7 +447,7 @@ const ProfileMenuPage = (props) => {
           />
         </div>
       </div>
-         <DownloadCSV
+      <DownloadCSV
         data={data}
         fileName={filename}
         triggerDownload={triggerDownload}

@@ -1,5 +1,5 @@
 const { Queue, Worker } = require("bullmq");
-const connection = require("../services/redis/config");
+const connection = require("../cbServices/redis/config");
 
 // Create and export the job queue
 const jobQueue = new Queue("ticketQues", { connection });

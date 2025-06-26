@@ -19,8 +19,8 @@ import DeleteIcon from "../../../assets/media/Trash.png";
 import { Toast } from "primereact/toast";
 import DeleteImage from "../../../assets/media/Delete.png";
 import client from "../../../services/restClient";
-import { Dropdown } from "primereact/dropdown"
-import { Skeleton } from 'primereact/skeleton';
+import { Dropdown } from "primereact/dropdown";
+import { Skeleton } from "primereact/skeleton";
 
 const CompanyAddressesDataTable = ({
   items,
@@ -390,7 +390,10 @@ const CompanyAddressesDataTable = ({
 
   const renderSkeleton = () => {
     return (
-      <DataTable value={Array.from({ length: 5 })} className="p-datatable-striped">
+      <DataTable
+        value={Array.from({ length: 5 })}
+        className="p-datatable-striped"
+      >
         <Column body={<Skeleton />} />
         <Column body={<Skeleton />} />
         <Column body={<Skeleton />} />
@@ -697,7 +700,11 @@ const CompanyAddressesDataTable = ({
                   icon={
                     <img
                       src={DeleteIcon}
-                      style={{ marginRight: "4px", width: "1em", height: "1em" }}
+                      style={{
+                        marginRight: "4px",
+                        width: "1em",
+                        height: "1em",
+                      }}
                     />
                   }
                   onClick={handleDelete}
@@ -867,6 +874,5 @@ const CompanyAddressesDataTable = ({
     </>
   );
 };
-
 
 export default CompanyAddressesDataTable;

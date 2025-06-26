@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -39,13 +40,13 @@ const MyRouter = (props) => {
 
             <Route element={<ProtectedRoute redirectPath={'/login'} />}>
                 <Route path="/project" exact element={<DashboardAdminControl />} />
-                // user details
+                {/* // user details */}
                 <Route path="/account" exact element={<Account />} />
                 <Route path="/users/:singleUsersId" exact element={<SingleUsersPage />} />
                 <Route path="/users" exact element={<UserProjectLayoutPage />} />
-                // myapp
+                {/* // myapp */}
                 {/* ~cb-add-protected-route~ */}
-                // dashboards
+                {/* // dashboards */}
                 {/* <Route path="/dashboard" exact element={<Dashboard />} /> */}
                 <Route path="/DashboardAdminControl" exact element={<DashboardAdminControl />} />
                 <Route path="/DashboardCompanyData" exact element={<DashboardCompanyData />} />
@@ -55,7 +56,7 @@ const MyRouter = (props) => {
                 <Route path="/DashboardHRControls" exact element={<DashboardHRControls />} />
                 <Route path="/DashboardMessaging" exact element={<DashboardMessaging />} />
                 <Route path="/DashboardUserManagement" exact element={<DashboardUserManagement />} />
-                // components
+                {/* // components */}
                 <Route path="/*" exact element={<CBRouter/>}/>
                 <Route path="/*" exact element={<AppRouter/>}/>
             </Route>

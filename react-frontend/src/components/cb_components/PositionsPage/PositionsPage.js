@@ -132,7 +132,13 @@ const PositionsPage = (props) => {
           message: error.message || "Failed get Positions",
         });
       });
-  }, [showFakerDialog, showDeleteAllDialog, showEditDialog, showCreateDialog, refresh]);
+  }, [
+    showFakerDialog,
+    showDeleteAllDialog,
+    showEditDialog,
+    showCreateDialog,
+    refresh,
+  ]);
 
   const onClickSaveFilteredfields = (ff) => {
     console.debug(ff);
@@ -231,25 +237,25 @@ const PositionsPage = (props) => {
     },
     permissions.import
       ? {
-        label: "Import",
-        icon: "pi pi-upload",
-        command: () => setShowUpload(true),
-      }
+          label: "Import",
+          icon: "pi pi-upload",
+          command: () => setShowUpload(true),
+        }
       : null,
     permissions.export
       ? {
-        label: "Export",
-        icon: "pi pi-download",
-        command: () => {
-          data.length > 0
-            ? setTriggerDownload(true)
-            : props.alert({
-              title: "Export",
-              type: "warn",
-              message: "no data to export",
-            });
-        },
-      }
+          label: "Export",
+          icon: "pi pi-download",
+          command: () => {
+            data.length > 0
+              ? setTriggerDownload(true)
+              : props.alert({
+                  title: "Export",
+                  type: "warn",
+                  message: "no data to export",
+                });
+          },
+        }
       : null,
     {
       label: "Help",
@@ -259,35 +265,35 @@ const PositionsPage = (props) => {
     { separator: true },
     process.env.REACT_APP_ENV == "development"
       ? {
-        label: "Testing",
-        icon: "pi pi-check-circle",
-        items: [
-          {
-            label: "Faker",
-            icon: "pi pi-bullseye",
-            command: (e) => {
-              setShowFakerDialog(true);
+          label: "Testing",
+          icon: "pi pi-check-circle",
+          items: [
+            {
+              label: "Faker",
+              icon: "pi pi-bullseye",
+              command: (e) => {
+                setShowFakerDialog(true);
+              },
+              show: true,
             },
-            show: true,
-          },
-          {
-            label: `Drop ${data?.length}`,
-            icon: "pi pi-trash",
-            command: (e) => {
-              setShowDeleteAllDialog(true);
+            {
+              label: `Drop ${data?.length}`,
+              icon: "pi pi-trash",
+              command: (e) => {
+                setShowDeleteAllDialog(true);
+              },
             },
-          },
-        ],
-      }
+          ],
+        }
       : null,
     permissions.seeder
       ? {
-        label: "Data seeder",
-        icon: "pi pi-database",
-        command: (e) => {
-          setShowSeederDialog(true);
-        },
-      }
+          label: "Data seeder",
+          icon: "pi pi-database",
+          command: (e) => {
+            setShowSeederDialog(true);
+          },
+        }
       : null,
   ].filter(Boolean);
 
@@ -340,7 +346,7 @@ const PositionsPage = (props) => {
           {item.label}
         </div>
       ),
-      command: () => { },
+      command: () => {},
     },
     { separator: true },
     { label: "Name Ascending", command: () => onMenuSort("nameAsc") },
@@ -403,7 +409,9 @@ const PositionsPage = (props) => {
     const tabId = getOrSetTabId();
     const response = await props.get();
     const currentCache = response?.results;
-    const selectedUser = localStorage.getItem(`selectedUser_${tabId}`) || currentCache?.selectedUser;
+    const selectedUser =
+      localStorage.getItem(`selectedUser_${tabId}`) ||
+      currentCache?.selectedUser;
     setSelectedUser(selectedUser);
 
     if (currentCache && selectedUser) {
@@ -470,7 +478,6 @@ const PositionsPage = (props) => {
       }
     };
     updateCache();
-
   }, [paginatorRecordsNo, selectedUser]);
 
   useEffect(() => {
@@ -534,14 +541,15 @@ const PositionsPage = (props) => {
             <strong>Positions </strong>
           </h4>
           {permissions.read ? (
-          <SplitButton
-            model={menuItems.filter(
-              (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
-            )}
-            dropdownIcon="pi pi-ellipsis-h"
-            buttonClassName="hidden"
-            menuButtonClassName="ml-1 p-button-text"
-          />          ) : null}
+            <SplitButton
+              model={menuItems.filter(
+                (m) => !(m.icon === "pi pi-trash" && items?.length === 0),
+              )}
+              dropdownIcon="pi pi-ellipsis-h"
+              buttonClassName="hidden"
+              menuButtonClassName="ml-1 p-button-text"
+            />
+          ) : null}
         </div>
         <div className="col-6 flex justify-content-end">
           <>
@@ -561,7 +569,7 @@ const PositionsPage = (props) => {
               }
               buttonClassName="hidden"
               menuButtonClassName="ml-1 p-button-text"
-            // menuStyle={{ width: "250px" }}
+              // menuStyle={{ width: "250px" }}
             ></SplitButton>
             <SplitButton
               model={sortMenuItems.filter(
@@ -577,16 +585,17 @@ const PositionsPage = (props) => {
               menuButtonClassName="ml-1 p-button-text"
               menuStyle={{ width: "200px" }}
             ></SplitButton>
-                        {permissions.create ? (
-            <Button
-              label="add"
-              style={{ height: "30px", marginRight: "10px" }}
-              rounded
-              loading={loading}
-              icon="pi pi-plus"
-              onClick={() => setShowCreateDialog(true)}
-              role="positions-add-button"
-            />            ) : null}
+            {permissions.create ? (
+              <Button
+                label="add"
+                style={{ height: "30px", marginRight: "10px" }}
+                rounded
+                loading={loading}
+                icon="pi pi-plus"
+                onClick={() => setShowCreateDialog(true)}
+                role="positions-add-button"
+              />
+            ) : null}
           </>
         </div>
       </div>
@@ -667,7 +676,11 @@ const PositionsPage = (props) => {
         onYes={() => deleteAll()}
         loading={loading}
       />
-    <HelpbarService isVisible={isHelpSidebarVisible} onToggle={toggleHelpSidebar} serviceName="positions" />
+      <HelpbarService
+        isVisible={isHelpSidebarVisible}
+        onToggle={toggleHelpSidebar}
+        serviceName="positions"
+      />
     </div>
   );
 };
